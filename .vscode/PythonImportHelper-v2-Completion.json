@@ -18,6 +18,15 @@
         "documentation": {}
     },
     {
+        "label": "re",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "re",
+        "description": "re",
+        "detail": "re",
+        "documentation": {}
+    },
+    {
         "label": "Deck",
         "importPath": "card",
         "description": "card",
@@ -42,6 +51,14 @@
         "documentation": {}
     },
     {
+        "label": "Player",
+        "importPath": "player",
+        "description": "player",
+        "isExtraImport": true,
+        "detail": "player",
+        "documentation": {}
+    },
+    {
         "label": "Game",
         "importPath": "game",
         "description": "game",
@@ -54,7 +71,7 @@
         "kind": 6,
         "importPath": "GameGuessingApp.card",
         "description": "GameGuessingApp.card",
-        "peekOfCode": "class Suit:\n    suit = {\n        \"Heart\": 4,\n        \"Diamond\": 3,\n        \"Club\": 2,\n        \"Spade\": 1,\n        \"Black Joker\": 5,\n        \"Red Joker\": 6,\n    }\nclass Rank:",
+        "peekOfCode": "class Suit:\n    suit = {\n        \"Heart\": 4,\n        \"Diamond\": 3,\n        \"Club\": 2,\n        \"Spade\": 1    \n    }\nclass Rank:\n    rank = {\n        \"3\": 3,",
         "detail": "GameGuessingApp.card",
         "documentation": {}
     },
@@ -63,7 +80,7 @@
         "kind": 6,
         "importPath": "GameGuessingApp.card",
         "description": "GameGuessingApp.card",
-        "peekOfCode": "class Rank:\n    rank = {\n        \"A\": 14,\n        \"2\": 15,\n        \"3\": 3,\n        \"4\": 4,\n        \"5\": 5,\n        \"6\": 6,\n        \"7\": 7,\n        \"8\": 8,",
+        "peekOfCode": "class Rank:\n    rank = {\n        \"3\": 3,\n        \"4\": 4,\n        \"5\": 5,\n        \"6\": 6,\n        \"7\": 7,\n        \"8\": 8,\n        \"9\": 9,\n        \"10\": 10,",
         "detail": "GameGuessingApp.card",
         "documentation": {}
     },
@@ -72,7 +89,7 @@
         "kind": 6,
         "importPath": "GameGuessingApp.card",
         "description": "GameGuessingApp.card",
-        "peekOfCode": "class Card:\n    def __init__(self, suit, rank):\n        self.suit = suit\n        self.rank = rank\n    def __str__(self):\n        return f\"{self.rank} of {self.suit}\"\n    def __lt__(self, other):\n        if Rank.rank[self.rank] == Rank.rank[other.rank]:\n            return Suit.suit[self.suit] < Suit.suit[other.suit]\n        return Rank.rank[self.rank] < Rank.rank[other.rank]",
+        "peekOfCode": "class Card:\n    def __init__(self, suit, rank):\n        self._suit = suit\n        self._rank = rank\n    @property\n    def suit(self):\n        return self._suit\n    # Property for rank to manage access\n    @property\n    def rank(self):",
         "detail": "GameGuessingApp.card",
         "documentation": {}
     },
@@ -81,7 +98,7 @@
         "kind": 6,
         "importPath": "GameGuessingApp.card",
         "description": "GameGuessingApp.card",
-        "peekOfCode": "class Deck:\n    def __init__(self):\n        self.cards = [\n            Card(suit, rank)\n            for suit in Suit.suit.keys()\n            if suit not in (\"Black Joker\", \"Red Joker\")\n            for rank in Rank.rank.keys()\n        ] + [Card(\"Black Joker\", \"A\"), Card(\"Red Joker\", \"A\")]\n        self.shuffle()\n    def shuffle(self):",
+        "peekOfCode": "class Deck:\n    def __init__(self):\n        self.cards = [\n            Card(suit, rank)\n            for suit in Suit.suit.keys()\n            for rank in Rank.rank.keys()\n            if rank not in (\"Black Joker\", \"Red Joker\")\n        ] + [Card(\"\", \"Black Joker\"), Card(\"\", \"Red Joker\")]\n        self.shuffle()\n    def shuffle(self):",
         "detail": "GameGuessingApp.card",
         "documentation": {}
     },
@@ -90,7 +107,16 @@
         "kind": 6,
         "importPath": "GameGuessingApp.game",
         "description": "GameGuessingApp.game",
-        "peekOfCode": "class Game:\n    def __init__(self):\n        self.deck = Deck()\n        self.player = Player(\"Player\")\n        self.house = House()\n        self.current_reward = 0\n    def play_round(self):\n        if self.player.points < 25:\n            logging.info(\"Player does not have enough points to continue.\")\n            return",
+        "peekOfCode": "class Game:\n    def __init__(self):\n        self.deck = Deck()\n        self.player = Player(\"Player\")\n        self.house = House()\n        self.current_reward = 0\n    # Validate user input using regular expressions\n    @log_method_call\n    def validate_input():\n        isVailid = False",
+        "detail": "GameGuessingApp.game",
+        "documentation": {}
+    },
+    {
+        "label": "log_method_call",
+        "kind": 2,
+        "importPath": "GameGuessingApp.game",
+        "description": "GameGuessingApp.game",
+        "peekOfCode": "def log_method_call(func):\n    def wrapper(*args, **kwargs):\n        logging.info(f\"Calling method: {func.__name__}\")\n        result = func(*args, **kwargs)\n        logging.info(f\"Method {func.__name__} finished\")\n        return result\n    return wrapper\nclass Game:\n    def __init__(self):\n        self.deck = Deck()",
         "detail": "GameGuessingApp.game",
         "documentation": {}
     },
@@ -99,7 +125,7 @@
         "kind": 2,
         "importPath": "GameGuessingApp.main",
         "description": "GameGuessingApp.main",
-        "peekOfCode": "def main():\n    game = Game()\n    game.start_game()\nif __name__ == \"__main__\":\n    main()",
+        "peekOfCode": "def main():\n    game = Game()\n    game.start_game()\n    player = Player(\"Player\")\n    if player.points >= 1000:\n        print(\"You Win\")\nif __name__ == \"__main__\":\n    main()",
         "detail": "GameGuessingApp.main",
         "documentation": {}
     },
@@ -108,7 +134,7 @@
         "kind": 6,
         "importPath": "GameGuessingApp.player",
         "description": "GameGuessingApp.player",
-        "peekOfCode": "class Player:\n    def __init__(self, name):\n        self.name = name\n        self.points = 60\n        self.card = None\n    def make_guess(self, house_card, guess):\n        return (guess == \"greater\" and self.card > house_card) or (\n            guess == \"less\" and self.card < house_card\n        )\n    def update_points(self, amount):",
+        "peekOfCode": "class Player:\n    def __init__(self, name):\n        self.name = name\n        self._points = 60\n        self.card = None\n    @property\n    def points(self):\n        return self._points\n    @points.setter\n    def points(self, value):",
         "detail": "GameGuessingApp.player",
         "documentation": {}
     },

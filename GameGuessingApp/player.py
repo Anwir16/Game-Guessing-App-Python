@@ -1,8 +1,15 @@
 class Player:
     def __init__(self, name):
         self.name = name
-        self.points = 60
+        self._points = 60
         self.card = None
+    
+    @property
+    def points(self):
+        return self._points
+    @points.setter
+    def points(self, value):
+        self._points = value
 
     def make_guess(self, house_card, guess):
         return (guess == "greater" and self.card > house_card) or (
